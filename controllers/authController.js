@@ -11,9 +11,6 @@ const isCollegeEmail = (email) => {
 export const registerAdmin = async (req, res) => {
   const { username, email, phone, password, confirmPassword } = req.body;
 
-  // Debugging: Log request body
-  console.log("Received request body:", req.body);
-
   // Validate required fields
   if (!username || !email || !phone || !password || !confirmPassword) {
     return res.status(400).json({ message: "All fields are required" });
@@ -40,7 +37,7 @@ export const registerAdmin = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new admin (✅ Include username)
+    // Create new admin
     const newAdmin = new Admin({ username, email, phone, password: hashedPassword });
     await newAdmin.save();
 
@@ -66,14 +63,12 @@ export const loginAdmin = async (req, res) => {
   }
 
   try {
-    // Find admin by email
     const admin = await Admin.findOne({ email });
 
     if (!admin) {
       return res.status(401).json({ message: "Admin not found" });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect password" });

@@ -15,7 +15,7 @@ const adminSchema = new mongoose.Schema({
     match: [/^\d{10}$/, "Phone number must be 10 digits"],
   },
   password: { type: String, required: true },
-  role: { type: String, default: "admin" }, // Role-based access
+  role: { type: String, default: "admin" },
 });
 
 const Admin = mongoose.models.Admin || mongoose.model("Admin", adminSchema);
